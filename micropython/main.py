@@ -37,11 +37,13 @@
 
 # from lib.utils import connect_wifi, load_env_vars
 
-# env_vars = load_env_vars("lib/.env")
-# # connect WiFI
-# ssid = env_vars.get("WIFI_SSID")
-# password = env_vars.get("WIFI_PASSWORD")
-# connect_wifi(ssid, password)
+# # env_vars = load_env_vars("lib/.envh")
+# # # connect WiFI
+# # ssid = env_vars.get("WIFI_SSID")
+# # password = env_vars.get("WIFI_PASSWORD")
+# # ssid ="Rishil"
+# # password = "rishilhotspot"
+# # connect_wifi(ssid, password)
 
 # # # import webrepl
 # # # webrepl.start()
@@ -116,14 +118,6 @@
 # p26.on()
 # p13.on()
 
-# # while True:
-# #     if not buttonB.value():
-# #         p26.on()
-# #         calibration_data[7] = getData(Nt, decode_period_s)
-# #         gc.collect()
-# #         p26.off()
-# #         break
-
 # calibration_data[7] = getData(Nt, decode_period_s)
 # print(gc.mem_free())
 # gc.collect()
@@ -158,25 +152,24 @@
 
 # print(3)
 
-# decode = Runner('MsetCCA', buffer_size=Ns) # initialise a base runner
-# decode.setup() # setup peripherals and memory buffers
-# decode.calibrate(calibration_data)
+# del runner
 
-# print(4)
+# from lib.runner import OnlineRunner
+# from lib.logging import logger_types
 
-# decode.run()
+# api_host = "http://172.20.10.2:5001/" # make sure the port corresponds to your logging server configuration
 
-# print(5)
+# log_params = dict(server=api_host, 
+#                   log_period=4, 
+#                   logger_type=logger_types.HTTP, 
+#                   send_raw=True, 
+#                   session_id='hotspot_test_device')
 
-# for i in range(5):
-#     p13.on()
-#     time.sleep(5)
-#     print(decode.decoded_output)
-#     p13.off()
+# runner = OnlineRunner('MsetCCA', buffer_size=Ns)
+# runner.setup(**log_params)
 
-# print(6)
-# decode.stop()
-# print(7)
+# runner.calibrate(calibration_data)
+# runner.run()
 
 import gc
 from micropython import alloc_emergency_exception_buf
@@ -217,17 +210,6 @@ time.sleep(5)
 
 from lib.utils import connect_wifi, load_env_vars
 
-# env_vars = load_env_vars("lib/.envh")
-# # connect WiFI
-# ssid = env_vars.get("WIFI_SSID")
-# password = env_vars.get("WIFI_PASSWORD")
-# ssid ="Rishil"
-# password = "rishilhotspot"
-# connect_wifi(ssid, password)
-
-# # import webrepl
-# # webrepl.start()
-
 p26.on()
 p13.on()
 
@@ -237,12 +219,26 @@ from ulab import numpy as np
 import utime as time
 from lib.runner import Runner
 
+def preprocess_data(signal):
+    
+    """Preprocess incoming signal before decoding algorithms.
+    This involves applying a bandpass filter to isolate the target SSVEP range
+    and then downsampling the signal to the Nyquist boundary.
+    
+    Returns:
+        [np.ndarray]: filtered and downsampled signal
+    """
+    from lib.signal import sos_filter
+    downsample_freq = 64
+    ds_factor = 256//downsample_freq
+    return sos_filter(signal)[::ds_factor]
+
 def collectData(decode_period_s):
     
     global runner
     
     time.sleep(decode_period_s)
-    data = runner.output_buffer
+    data = preprocess_data(runner.output_buffer)
     gc.collect()
     return np.array(data)
 
@@ -281,7 +277,7 @@ print(1)
 
 decode_period_s = 4 # decode every x seconds
 Nc = 1
-Ns = 128
+Ns = 256
 Nt = 3
 stim_freqs = [7, 10, 12]
 
@@ -343,7 +339,7 @@ log_params = dict(server=api_host,
                   log_period=4, 
                   logger_type=logger_types.HTTP, 
                   send_raw=True, 
-                  session_id='hotspot_test_device')
+                  session_id='downsample_test')
 
 runner = OnlineRunner('MsetCCA', buffer_size=Ns)
 runner.setup(**log_params)
