@@ -97,9 +97,14 @@ class Runner:
         this function to be called using `micropython.schedule` which
         requires the scheduled func to accept an argument.
         """
-        data = np.array(self.output_buffer)
-        data = data.reshape((1, len(data)))  # reshape to row vector
-        gc.collect()
+        if self.preprocessing_enabled:
+            data = np.array(self.preprocess_data(self.output_buffer))
+            data = data.reshape((1, len(data)))  # reshape to row vector
+            gc.collect()
+        else:
+            data = np.array(self.output_buffer)
+            data = data.reshape((1, len(data)))  # reshape to row vector
+            gc.collect() 
 
         result = self.decoder.classify(data)
 

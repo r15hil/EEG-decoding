@@ -1,5 +1,6 @@
 from ulab import numpy as np
 import gc
+import config
 
 from .computation import solve_eig_qr, solve_gen_eig_prob, standardise, col_concat, corr, block_diag, sign
 
