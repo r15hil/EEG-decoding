@@ -126,4 +126,4 @@ dmypy.json
 /data
 micropython/mpy-modules/*.mpy
 .DS_store
-eeg_lib/logs/
+

@@ -223,7 +223,7 @@ class OnlineRunner(Runner):
         super().setup(spi_params=spi_params, adc_params=adc_params)
         gc.collect()
 
-        self.configure_wifi(env_path="lib/.envh")
+        self.configure_wifi(env_path="lib/.env")
         gc.collect()
 
         self._setup_logger(log_period, logger_type, **logger_params)
@@ -241,7 +241,7 @@ class OnlineRunner(Runner):
             self.logger = None
 
     @staticmethod
-    def configure_wifi(env_path=".envh"):
+    def configure_wifi(env_path=".env"):
 
         from lib.utils import connect_wifi, load_env_vars
 
