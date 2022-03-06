@@ -180,7 +180,6 @@ class GCCA_SSVEP:
             w_Y_n = w[
                 2 * self.Nc :
             ]  # final 2*Nh weights correspond to ref sinusoids with harmonics
-
             rho1 = pearsonr(w_Chi_n.T.dot(X_test), w_Chi_bar_n.T.dot(Chi_bar_n))[0]
             rho2 = pearsonr(w_Chi_n.T.dot(X_test), w_Y_n.T.dot(Y_n))[0]
 
@@ -434,8 +433,8 @@ def cca_reference(list_freqs, fs, Ns, Nh=3, standardise_out=False):
         y_ref[freq_i] = tmp  # 2*num_harms because include both sin and cos
 
     y_ref = np.squeeze(y_ref)
-    if standardise_out:  # zero mean, unit std. dev
-        return standardise(y_ref)
+    # if standardise_out:  # zero mean, unit std. dev
+    #     return standardise(y_ref)
     return y_ref
 
 

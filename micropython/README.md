@@ -168,9 +168,9 @@ USER_C_MODULES = $(BUILD_DIR)/ulab/code/micropython.cmake
 Key commands:
 connect with local repl: screen /dev/tty.usbserial-0001 115200 
 run board accesses through terminal: ampy --port="/dev/tty.usbserial-0001" rm boot.py
+file:///Users/rishil/Downloads/webrepl-master/webrepl.html#192.168.0.76:8266
 
 Board now boots with WebREPL:
 TODO:
 Build calibration class for wireless control
-Instantiate runner for calibration called
-Instantiate 
+Instantiate calibration class which holds calibration data
