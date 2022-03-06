@@ -307,8 +307,8 @@ class CCA:
         )  # precompute data auto correlation matrix
         for f in self.stim_freqs:
             Y = cca_reference(
-                [f], self.fs, len(X_test), Nh=self.Nh, standardise_out=True
-            )
+                [f], self.fs, len(X_test), Nh=self.Nh, standardise_out=False
+            ) # CHANGE: From True to False to match headset code
             if method == "eig":
                 rho = self.cca_eig(X_test, Y)[0]
             else:

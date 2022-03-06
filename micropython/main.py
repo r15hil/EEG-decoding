@@ -55,7 +55,7 @@ log_params = dict(server=api_host,
                   log_period=4, 
                   logger_type=logger_types.HTTP, 
                   send_raw=True, 
-                  session_id='open_eyes')
+                  session_id='ssvep')
 
 runner = OnlineRunner('CCA', buffer_size=Ns)
 runner.setup(**log_params)

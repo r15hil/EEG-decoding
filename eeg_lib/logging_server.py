@@ -5,7 +5,7 @@ import time
 
 app = Flask(__name__)
 
-DEFAULT_FILENAME = "/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/logs/alpha_tests.json"
+DEFAULT_FILENAME = "/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/logs/twelve.json"
 
 
 def write_json(filename, data):
