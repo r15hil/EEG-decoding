@@ -1,11 +1,11 @@
 from sklearn.cross_decomposition import CCA as CCA_sklearn
-from .filtering import filterbank
+from filtering import filterbank
 import numpy as np
 
 from scipy.stats import pearsonr
 from scipy.linalg import block_diag
 
-from .utils import resample, standardise, solve_gen_eig_prob
+from utils import resample, standardise, solve_gen_eig_prob
 
 np.random.seed(0)
 

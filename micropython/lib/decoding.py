@@ -16,7 +16,7 @@ class SingleChannelMsetCCA():
         self.Ns, self.Nt = None, None
         self.Y = None
         
-    def fit(self, X, compress_ref=True): 
+    def fit(self, X, compress_ref=False): 
         """
         Expects a training matrix X of shape Nt x Ns. If `compress_ref=True`, the `Nt` components in optimised 
         reference signal Y will be averaged to form a single reference vector. This can be used for memory 
@@ -29,7 +29,7 @@ class SingleChannelMsetCCA():
         S = np.eye(len(R))*np.diag(R) # intra-trial diag covariance matrix
         lam, V = solve_gen_eig_prob((R-S), S) # solve generalised eig problem
         w = V[:, np.argmax(lam)] # find eigenvector corresp to largest eigenvalue
-        Y = np.array([x*w[i] for i, x in enumerate(X)]) # store optimised reference vector Nt x Ns self.Y = Y
+        self.Y = np.array([x*w[i] for i, x in enumerate(X)]) # store optimised reference vector Nt x Ns self.Y = Y
         
         if compress_ref:
             self.Y = np.mean(Y, axis=0).reshape((1, max(Y.shape))) # this will average Nt components in Y: Nc x Nt -> 1 x Nt
