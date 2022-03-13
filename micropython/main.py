@@ -7,7 +7,6 @@ from lib.utils import connect_wifi, load_env_vars
 
 # allocate exception buffer for ISRs
 alloc_emergency_exception_buf(100)
-
 # enable and configure garbage collection
 gc.enable()
 gc.collect()
@@ -23,85 +22,17 @@ buttonB = Pin(34, Pin.IN)
 p26.on()
 p13.on()
 
-# time.sleep(5)
-
-# p26.off()
-# p13.off()
-
-# time.sleep(5)
-
 from ulab import numpy as np
 import utime as time
 from lib.runner import Runner  
 
-
-def preprocess_data(signal):
-    
-    """Preprocess incoming signal before decoding algorithms.
-    This involves applying a bandpass filter to isolate the target SSVEP range
-    and then downsampling the signal to the Nyquist boundary.
-    
-    Returns:
-        [np.ndarray]: filtered and downsampled signal
-    """
-    downsample_freq = 64
-    ds_factor = 256//downsample_freq
-    return signal[::ds_factor]
-
-def collectData(decode_period_s):
-    
-    global runner
-    
-    time.sleep(decode_period_s)
-    data = preprocess_data(runner.output_buffer)
-    gc.collect()
-    return data
-
-def getData(Nt, decode_period_s):
-
-    global runner
-    global p26
-
-    runner.run()
-    
-    trials = []
-    time.sleep(5)
-    count=0
-    
-    toggle = True
-
-    if Nt <=1:
-        return collectData(decode_period_s)
-    for i in range(Nt):
-        if toggle:
-            p26.on()
-            toggle = False
-        else:
-            p26.off()
-            toggle = True
-
-        trials.append(collectData(decode_period_s))
-        
-    runner.stop()
-
-    gc.collect()
-    p26.off()
-    return trials
-
-print(1)
-
-decode_period_s = 4 # decode every x seconds
-Ns = 256
-Nt = 4
-stim_freqs = [7, 10, 12]
-
-runner = Runner('CCA', buffer_size=Ns)
+runner = Runner('CCA', buffer_size=256)
 runner.setup()
+runner.run()
 
 p26.off()
 p13.off()
 
-calibration_data = {}
 print(2)
 time.sleep(5)
 
@@ -112,45 +43,83 @@ env_vars = load_env_vars("lib/.env")
 ssid = env_vars.get("WIFI_SSID")
 password = env_vars.get("WIFI_PASSWORD")
 connect_wifi(ssid, password)
+# ssid = 'vodafone749282'
+# password = 'c4Eqssga2YAdAZ97'
+# connect_wifi(ssid, password)
 
-calibration_data[7] = getData(Nt, decode_period_s)
-toSend = {"7": calibration_data[7]}
-requests.JSONRequest("http://192.168.0.13:5001/7hz", toSend)
-del calibration_data[7]
-print(gc.mem_free())
-gc.collect()
-print(gc.mem_free())
+#send 7hz data
+for i in range(4):
+    time.sleep(4)
+    data = runner.output_buffer
+    toSend = {"7":data}
+    print(toSend)
+    requests.JSONRequest("http://192.168.0.13:5001/7hz", toSend)
+#     requests.JSONRequest("http://192.168.1.106:5001/7hz", toSend)
+#     requests.JSONRequest("http://172.20.10.2:5001/7hz", toSend)
+    del data
+    print(gc.mem_free())
+    gc.collect()
+    print(gc.mem_free())
+
 p26.off()
 p13.on()
-time.sleep(5)
-calibration_data[10] = getData(Nt, decode_period_s)
-print("=====================================================")
-toSend = {"10": calibration_data[10]}
-requests.JSONRequest("http://192.168.0.13:5001/10hz", toSend)
-del calibration_data[10]
-print(gc.mem_free())
-gc.collect()
-print(gc.mem_free())
+
+time.sleep(10)
+
+p26.on()
+p13.on()
+
+#send 10hz data
+for i in range(4):
+    time.sleep(4)
+    data = runner.output_buffer
+    toSend = {"10":data}
+    print(toSend)
+    requests.JSONRequest("http://192.168.0.13:5001/10hz", toSend)
+#     requests.JSONRequest("http://192.168.1.106:5001/10hz", toSend)
+#     requests.JSONRequest("http://172.20.10.2:5001/10hz", toSend) 
+    del data
+    print(gc.mem_free())
+    gc.collect()
+    print(gc.mem_free())
+
+
 p26.off()
 p13.on()
-time.sleep(5)
-calibration_data[12] = getData(Nt, decode_period_s)
-toSend = {"12": calibration_data[12]}
-requests.JSONRequest("http://192.168.0.13:5001/12hz", toSend)
-del calibration_data
-print(gc.mem_free())
-gc.collect()
-print(gc.mem_free())
-p26.off()
+
+time.sleep(10)
+
+p26.on()
 p13.on()
-time.sleep(5)
+
+#send 12hz data
+for i in range(4):
+    time.sleep(4)
+    data = runner.output_buffer
+    toSend = {"12":data}
+    print(toSend)
+    requests.JSONRequest("http://192.168.0.13:5001/12hz", toSend)
+#     requests.JSONRequest("http://192.168.1.106:5001/12hz", toSend)
+#     requests.JSONRequest("http://172.20.10.2:5001/12hz", toSend) 
+    del data
+    print(gc.mem_free())
+    gc.collect()
+    print(gc.mem_free())
 
 requests.GETRequest("http://192.168.0.13:5001/isCalibrated")
+# requests.GETRequest("http://192.168.1.106:5001/isCalibrated")
+# requests.GETRequest("http://172.20.10.2:5001/isCalibrated") 
 print(3)
-runner.run()
 
 while True:
     time.sleep(4)
-    data = preprocess_data(runner.output_buffer)
-    toSend = {"raw_data_downsampled":data}
+    data = runner.output_buffer
+    toSend = {"raw_data":data}
+    print(toSend)
     requests.JSONRequest("http://192.168.0.13:5001/decode", toSend)
+#     requests.JSONRequest("http://192.168.1.106:5001/decode", toSend)
+#     requests.JSONRequest("http://172.20.10.2:5001/decode", toSend) 
+    del data
+    print(gc.mem_free())
+    gc.collect()
+    print(gc.mem_free())
