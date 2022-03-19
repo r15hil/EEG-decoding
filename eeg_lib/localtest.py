@@ -1,3 +1,4 @@
+from codecs import xmlcharrefreplace_errors
 import json
 import sys
 import time
@@ -121,34 +122,34 @@ print(train_this,"========",chi_train)
 
 mset_cca_pynb.fit(chi_train)
 
-X_test = data_tensor[2, :, :, [5,6,7,8]]
+X_test = test7hz[1]
 
-
+print(decoding(X_test),mset_cca_pynb.classify(np.array(X_test).reshape(1,Ns)))
 # index_pos = dict(zip(["Nc", "Ns", "Nt"], range(3)))
 
 # mset_cca.fit(chi_train)
 
-for i in X_test:
+# for i in X_test:
 
-    mset_res = decoding(i)
-    mset_cca_pynb_res = mset_cca.classify(np.array(i).reshape(1,256))
-    highest_mset = 0
-    highest_mset_freq = -1
-    highest_mset1 = 0
-    highest_mset_freq1 = -1
+#     mset_res = decoding(i)
+#     mset_cca_pynb_res = mset_cca.classify(np.array(i).reshape(1,256))
+#     highest_mset = 0
+#     highest_mset_freq = -1
+#     highest_mset1 = 0
+#     highest_mset_freq1 = -1
 
-    for freq, acc in mset_res.items():
-        if abs(acc) > highest_mset:
-            highest_mset_freq = freq
-            highest_mset = abs(acc)
+#     for freq, acc in mset_res.items():
+#         if abs(acc) > highest_mset:
+#             highest_mset_freq = freq
+#             highest_mset = abs(acc)
 
-    for freq, acc in mset_cca_pynb_res.items():
-        if abs(acc) > highest_mset1:
-            highest_mset_freq1 = freq
-            highest_mset1 = abs(acc)
+#     for freq, acc in mset_cca_pynb_res.items():
+#         if abs(acc) > highest_mset1:
+#             highest_mset_freq1 = freq
+#             highest_mset1 = abs(acc)
 
-    print(highest_mset_freq, highest_mset_freq1 )
-    if 12 == highest_mset_freq:
-        print("CORRECT:", highest_mset_freq)
-    else:
-        print("WRONG:", highest_mset_freq)
+#     print(highest_mset_freq, highest_mset_freq1 )
+#     if 12 == highest_mset_freq:
+#         print("CORRECT:", highest_mset_freq)
+#     else:
+#         print("WRONG:", highest_mset_freq)

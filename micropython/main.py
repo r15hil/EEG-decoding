@@ -47,78 +47,15 @@ connect_wifi(ssid, password)
 # password = 'c4Eqssga2YAdAZ97'
 # connect_wifi(ssid, password)
 
-#send 7hz data
-for i in range(4):
-    time.sleep(4)
-    data = runner.output_buffer
-    toSend = {"7":data}
-    print(toSend)
-    requests.JSONRequest("http://192.168.0.13:5001/7hz", toSend)
-#     requests.JSONRequest("http://192.168.1.106:5001/7hz", toSend)
-#     requests.JSONRequest("http://172.20.10.2:5001/7hz", toSend)
-    del data
-    print(gc.mem_free())
-    gc.collect()
-    print(gc.mem_free())
-
-p26.off()
-p13.on()
-
-time.sleep(10)
-
-p26.on()
-p13.on()
-
-#send 10hz data
-for i in range(4):
-    time.sleep(4)
-    data = runner.output_buffer
-    toSend = {"10":data}
-    print(toSend)
-    requests.JSONRequest("http://192.168.0.13:5001/10hz", toSend)
-#     requests.JSONRequest("http://192.168.1.106:5001/10hz", toSend)
-#     requests.JSONRequest("http://172.20.10.2:5001/10hz", toSend) 
-    del data
-    print(gc.mem_free())
-    gc.collect()
-    print(gc.mem_free())
-
-
-p26.off()
-p13.on()
-
-time.sleep(10)
-
-p26.on()
-p13.on()
-
-#send 12hz data
-for i in range(4):
-    time.sleep(4)
-    data = runner.output_buffer
-    toSend = {"12":data}
-    print(toSend)
-    requests.JSONRequest("http://192.168.0.13:5001/12hz", toSend)
-#     requests.JSONRequest("http://192.168.1.106:5001/12hz", toSend)
-#     requests.JSONRequest("http://172.20.10.2:5001/12hz", toSend) 
-    del data
-    print(gc.mem_free())
-    gc.collect()
-    print(gc.mem_free())
-
-requests.GETRequest("http://192.168.0.13:5001/isCalibrated")
-# requests.GETRequest("http://192.168.1.106:5001/isCalibrated")
-# requests.GETRequest("http://172.20.10.2:5001/isCalibrated") 
-print(3)
-
 while True:
     time.sleep(4)
-    data = runner.output_buffer
+    # time.sleep(2)
+    data = runner.periph_manager.read_adc_buffer()
     toSend = {"raw_data":data}
     print(toSend)
-    requests.JSONRequest("http://192.168.0.13:5001/decode", toSend)
+    requests.JSONRequest("http://192.168.0.13:5001/raw", toSend)
 #     requests.JSONRequest("http://192.168.1.106:5001/decode", toSend)
-#     requests.JSONRequest("http://172.20.10.2:5001/decode", toSend) 
+    # requests.JSONRequest("http://172.20.10.2:5001/decode", toSend) 
     del data
     print(gc.mem_free())
     gc.collect()

@@ -97,6 +97,13 @@ def cal12():
     print(data)
     return jsonify(msg="successfully received"), 200
 
+@app.route('/raw', methods=["POST"])
+def raw():
+    data = request.get_json(force=True)
+    # print(cal[2]['12'])
+    print(data)
+    return jsonify(msg="successfully received"), 200
+
 @app.route('/isCalibrated', methods=["GET"])
 def calibrate():
     # print(cal)
@@ -148,7 +155,7 @@ def decoding():
     # print(decode_data)
 
     mset_res = mset_cca.classify(decode_data)
-    # gcca.classify(decode_data)
+    gcca_res = gcca.classify(decode_data)
     highest_mset = 0
     highest_mset_freq = -1
 
@@ -158,6 +165,16 @@ def decoding():
                 highest_mset = abs(acc)
 
     print(highest_mset_freq, highest_mset)
+
+    highest_gcca = 0
+    highest_gcca_freq = -1
+
+    for freq, acc in gcca_res.items():
+            if abs(acc) > highest_gcca:
+                highest_gcca_freq = freq
+                highest_gcca = abs(acc)
+
+    print(highest_gcca_freq, highest_gcca)
 
     return jsonify(msg="successfully received"), 200
 

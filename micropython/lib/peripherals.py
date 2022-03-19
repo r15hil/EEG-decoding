@@ -104,7 +104,7 @@ class PeripheralManager:
         if self.verbose:
             print(
                 "DigiPot set to {0} = gain of {1}".format(
-                    output_gain, 1.745 + (255 - output_gain) / (19.2 - 1.745)
+                    output_gain, 1.745 + (255 - output_gain) / (19.2 - 1.745) # WRONG
                 )
             )
 
