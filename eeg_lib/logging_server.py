@@ -9,7 +9,7 @@ from cca import MsetCCA_SSVEP
 
 app = Flask(__name__)
 
-DEFAULT_FILENAME = "/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/logs/newData.json"
+DEFAULT_FILENAME = "/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/logs/rishil_test_1_raw.json"
 
 stim_freqs = [7,10,12] # stim freqs used
 fs = 256 # sampling freq
