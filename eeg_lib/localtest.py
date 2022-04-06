@@ -124,7 +124,7 @@ mset_cca_pynb.fit(chi_train)
 
 X_test = test7hz[1]
 
-print(decoding(X_test),mset_cca_pynb.classify(np.array(X_test).reshape(1,Ns)))
+print(decoding(X_test), mset_cca_pynb.classify(np.array(X_test).reshape(1,Ns)))
 # index_pos = dict(zip(["Nc", "Ns", "Nt"], range(3)))
 
 # mset_cca.fit(chi_train)

@@ -84,7 +84,7 @@ class Runner:
         signal = np.array(signal) - np.mean(signal)  # remove DC component
 
         # downsample filtered signal by only selecting every `ds_factor` sample
-        return sos_filter(signal, fs=self.base_sample_freq)[::ds_factor]
+        return sos_filter(signal, fs=self.base_sample_freq)
 
     def calibrate(self, calibration_data_map):
         self.decoder.calibrate(calibration_data_map)
