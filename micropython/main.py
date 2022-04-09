@@ -8,8 +8,8 @@ from ulab import numpy as np
 import utime as time
 from lib.runner import Runner 
 
-ssid = 'Rishil'
-password = 'rishilhotspot'
+ssid = 'VM0857951'
+password = 'cchk7mrYgrzq'
 connect_wifi(ssid, password)
 time.sleep(4)
 runner = Runner('CCA', buffer_size=256)
@@ -23,11 +23,12 @@ while True:
     data = runner.periph_manager.read_adc_buffer()
     toSend = {"raw_data":data}
     print(toSend)
-#     requests.JSONRequest("http://192.168.0.13:5001/collect", toSend)
-    requests.JSONRequest("http://172.20.10.2:5001/collect", toSend)
+    requests.JSONRequest("http://192.168.0.13:5001/collect", toSend)
+    # requests.JSONRequest("http://172.20.10.2:5001/collect", toSend)
     del data
     del toSend
-    requests.GETRequest("http://172.20.10.2:5001/save")
+    # requests.GETRequest("http://172.20.10.2:5001/save")
+    requests.GETRequest("http://192.168.0.13:5001/save")
     
 
 # requests.GETRequest("http://192.168.0.13:5001/save")
