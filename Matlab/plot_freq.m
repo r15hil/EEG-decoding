@@ -1,7 +1,7 @@
 close all
 clear all
 
-f = fopen('/Users/rishil/Desktop/FYP/EEG-decoding/eeg_lib/logs/texts/connected_1.txt');
+f = fopen('C:\Users\RISHI\Desktop\FYP\EEG-decoding\eeg_lib\logs\texts\10hz_fs256_unfilt.txt');
 data = textscan(f,'%s');
 fclose(f);
 data = str2double(data{1}(2:end-1))';
@@ -16,7 +16,7 @@ plot(1:length(y), y);
 title('Data filtered')
 
 
-Fs = 64;            % Sampling frequency                    
+Fs = 256;            % Sampling frequency                    
 T = 1/Fs;             % Sampling period       
 L = length(data);     % Length of signal
 t = (0:L-1)*T;        % Time vector
